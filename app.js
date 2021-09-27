@@ -66,33 +66,32 @@ class UI{
 
 //STORE CLASS FOR LS
 class Store{
+    //Get books array from LS
+    static getBooks(){
+      let books;
+      if(localStorage.getItem('books') === null){
+        books = [];
+      }else{
+        books = JSON.parse(localStorage.getItem('books'));
+      }
+  
+      return books;
+    }  
 
   //Storing to LS function
   static addBook(book){
-    let books;
-    if(localStorage.getItem('books') === null){
-      books = [];
-    }
-    else{
-      books = JSON.parse(localStorage.getItem('books'));
-    }
-  
+
+    let books = Store.getBooks();
     books.push(book);
     localStorage.setItem('books',JSON.stringify(books));
   }
 
 
   //Remove from LS function
-  static removeBook(target){
-    let books;
-    if(localStorage.getItem('books') === null){
-      books = [];
-    }else{
-      books = JSON.parse(localStorage.getItem('books'));
-    }
-  
+  static removeBook(isbn){
+    let books = Store.getBooks(); 
     books.forEach((book,index)=>{
-      if(book.title === target.parentElement.parentElement.firstElementChild.textContent){
+      if(book.isbn === isbn){
         books.splice(index,1);
       }
     });
@@ -100,18 +99,6 @@ class Store{
     localStorage.setItem('books',JSON.stringify(books));
   }
 
-
-  //Get books array from LS
-  static getBooks(){
-    let books;
-    if(localStorage.getItem('books') === null){
-      books = [];
-    }else{
-      books = JSON.parse(localStorage.getItem('books'));
-    }
-
-    return books;
-  }   
 
 //Displaying books from LS
   static displayBook(){
@@ -161,7 +148,7 @@ bookForm.addEventListener('submit', e =>{
 bookList.addEventListener('click', e => {
   UI.deleteBook(e.target);
   //delete from LS
-  Store.removeBook(e.target);
+  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
 });
 
 
